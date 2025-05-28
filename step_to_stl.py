@@ -1,38 +1,43 @@
 import sys
-from OCC.Core.STEPControl import STEPControl_Reader
-from OCC.Core.StlAPI import StlAPI_Writer
-from OCC.Core.BRepMesh import BRepMesh_IncrementalMesh
-from OCC.Core.TopExp import TopExp_Explorer
-from OCC.Core.TopAbs import TopAbs_FACE
-from OCC.Core.BRep import BRep_Tool
+import os
+import FreeCAD
+import Part
+import Mesh
 
-def step_to_stl(step_file: str, stl_file: str, linear_deflection: float = 0.1, angular_deflection: float = 0.5):
-    # Load the STEP file
-    step_reader = STEPControl_Reader()
-    status = step_reader.ReadFile(step_file)
-    if status != 0:
-        raise Exception("Error reading STEP file.")
-
-    step_reader.TransferRoots()
-    shape = step_reader.OneShape()
-
-    # Mesh the shape for STL export
-    mesh = BRepMesh_IncrementalMesh(shape, linear_deflection, False, angular_deflection, True)
-    mesh.Perform()
-
-    # Export to STL
-    stl_writer = StlAPI_Writer()
-    stl_writer.SetASCIIMode(False)
-    success = stl_writer.Write(shape, stl_file)
-
-    if not success:
-        raise Exception("Error writing STL file.")
-
-    print(f"Successfully converted '{step_file}' to '{stl_file}'.")
-
-# Example usage:
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python step_to_stl.py input.step output.stl")
+def ask_for_step_file():
+    print("Please enter the path to a STEP file:")
+    step_path = input(">>> ").strip('"').strip("'")
+    if not os.path.isfile(step_path):
+        print("File not found.")
         sys.exit(1)
-    step_to_stl(sys.argv[1], sys.argv[2])
+    return step_path
+
+# Ask user for file path
+step_path = ask_for_step_file()
+
+# Build output path
+stl_path = os.path.splitext(step_path)[0] + ".stl"
+
+print(f"Reading STEP file: {step_path}")
+try:
+    shape = Part.read(step_path)
+except Exception as e:
+    print(f"Error reading STEP file: {e}")
+    sys.exit(1)
+
+if shape.isNull():
+    print("Error: Shape is empty.")
+    sys.exit(1)
+
+print("Creating FreeCAD document and object...")
+doc = FreeCAD.newDocument()
+part_obj = doc.addObject("Part::Feature", "ImportedPart")
+part_obj.Shape = shape
+
+print(f"Exporting STL to: {stl_path}")
+try:
+    Mesh.export([part_obj], stl_path)
+    print("Export successful!")
+except Exception as e:
+    print(f"Error exporting STL: {e}")
+    sys.exit(1)
