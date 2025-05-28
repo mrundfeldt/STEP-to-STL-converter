@@ -12,6 +12,6 @@ To use the script, first install FreeCAD, which brings its own python environmen
 
 The script is then run from PowerShell with the following command:
 
-& "C:\Users\$USER\AppData\Local\Programs\FreeCAD 1.0\bin\FreeCADCmd.exe" "C:\Python\step_to_stl.py"
+& "C:\Users\USER\AppData\Local\Programs\FreeCAD 1.0\bin\FreeCADCmd.exe" "C:\Python\step_to_stl.py"
 
 The file path needs to be entered in PowerShell when prompted, and the script will return an STL with the same name in the original folder.
