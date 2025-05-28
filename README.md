@@ -15,3 +15,10 @@ The script is then run from PowerShell with the following command:
 & "C:\Users\USER\AppData\Local\Programs\FreeCAD 1.0\bin\FreeCADCmd.exe" "C:\Python\step_to_stl.py"
 
 The file path needs to be entered in PowerShell when prompted, and the script will return an STL with the same name in the original folder.
+File path can be copied from right click on STEP file ("copy as path")
+
+Next steps: 
+
+- turn the whole thing into a .bat file that users can just drag the STEP file onto.
+- figure out if there's a way to save the user the trouble of installing FreeCAD on their machine by putting everything into a single executable file to be run locally.
+
