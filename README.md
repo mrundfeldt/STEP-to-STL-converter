@@ -10,15 +10,5 @@ Getting pythonocc to run on my work machine inside a restricted environment was 
 
 To use the script, first install FreeCAD, which brings its own python environment and cmd shell: https://www.freecad.org/downloads.php
 
-The script is then run from PowerShell with the following command:
-
-& "C:\Users\USER\AppData\Local\Programs\FreeCAD 1.0\bin\FreeCADCmd.exe" "C:\Python\step_to_stl.py"
-
-The file path needs to be entered in PowerShell when prompted, and the script will return an STL with the same name in the original folder.
-File path can be copied from right click on STEP file ("copy as path")
-
-Next steps: 
-
-- turn the whole thing into a .bat file that users can just drag the STEP file onto.
-- figure out if there's a way to save the user the trouble of installing FreeCAD on their machine by putting everything into a single executable file to be run locally.
-
+Next, download both files and place them in a folder together. You will need to adjust the path to your FreeCAD install in the batch file.
+The script is then run by dragging one or more STEP files onto the batch file. A CLI will pop up, show the file paths and wait for you to close it by hitting any key.
